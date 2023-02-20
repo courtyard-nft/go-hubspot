@@ -13,7 +13,8 @@ type ContactService interface {
 	GetByProperty(idProperty string, query string, contact interface{}, option *RequestQueryOption) (*ResponseResource, error)
 	Create(contact interface{}) (*ResponseResource, error)
 	Update(contactID string, contact interface{}) (*ResponseResource, error)
-	Delete(contactID string) error
+	UpdateByProperty(idProperty string, query string, contact interface{}) (*ResponseResource, error)
+	DeleteByProperty(idProperty string, query string) error
 	AssociateAnotherObj(contactID string, conf *AssociationConfig) (*ResponseResource, error)
 }
 
@@ -338,7 +339,7 @@ func (s *ContactServiceOp) Get(contactID string, contact interface{}, option *Re
 // e.g. &hubspot.RequestQueryOption{ Properties: []string{"custom_a", "custom_b"}}
 func (s *ContactServiceOp) GetByProperty(idProperty string, query string, contact interface{}, option *RequestQueryOption) (*ResponseResource, error) {
 	resource := &ResponseResource{Properties: contact}
-	if err := s.client.Get(s.contactPath+"?"+idProperty+"="+query, resource, option.setupProperties(defaultContactFields)); err != nil {
+	if err := s.client.Get(s.contactPath+"/"+query+"?"+"idProperty="+idProperty, resource, option.setupProperties(defaultContactFields)); err != nil {
 		return nil, err
 	}
 	return resource, nil
@@ -368,9 +369,18 @@ func (s *ContactServiceOp) Update(contactID string, contact interface{}) (*Respo
 	return resource, nil
 }
 
+func (s *ContactServiceOp) UpdateByProperty(idProperty string, query string, contact interface{}) (*ResponseResource, error) {
+	req := &RequestPayload{Properties: contact}
+	resource := &ResponseResource{Properties: contact}
+	if err := s.client.Patch(s.contactPath+"/"+query+"?"+"idProperty="+idProperty, req, resource); err != nil {
+		return nil, err
+	}
+	return resource, nil
+}
+
 // Delete deletes a contact.
-func (s *ContactServiceOp) Delete(contactID string) error {
-	return s.client.Delete(s.contactPath + "/" + contactID)
+func (s *ContactServiceOp) DeleteByProperty(idProperty string, query string) error {
+	return s.client.Delete(s.contactPath + "/" + query + "?" + "idProperty=" + idProperty)
 }
 
 // AssociateAnotherObj associates Contact with another HubSpot objects.
