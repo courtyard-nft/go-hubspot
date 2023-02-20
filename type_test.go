@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/courtyard-nft/go-hubspot/"
+	"github.com/courtyard-nft/go-hubspot"
 	"github.com/google/go-cmp/cmp"
 )
 
