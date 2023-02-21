@@ -14,7 +14,7 @@ type ContactService interface {
 	Create(contact interface{}) (*ResponseResource, error)
 	Update(contactID string, contact interface{}) (*ResponseResource, error)
 	UpdateByProperty(idProperty string, query string, contact interface{}) (*ResponseResource, error)
-	DeleteByProperty(idProperty string, query string) error
+	Delete(contactID string) error
 	AssociateAnotherObj(contactID string, conf *AssociationConfig) (*ResponseResource, error)
 }
 
@@ -379,8 +379,8 @@ func (s *ContactServiceOp) UpdateByProperty(idProperty string, query string, con
 }
 
 // Delete deletes a contact.
-func (s *ContactServiceOp) DeleteByProperty(idProperty string, query string) error {
-	return s.client.Delete(s.contactPath + "/" + query + "?" + "idProperty=" + idProperty)
+func (s *ContactServiceOp) Delete(contactID string) error {
+	return s.client.Delete(s.contactPath + "/" + contactID)
 }
 
 // AssociateAnotherObj associates Contact with another HubSpot objects.
