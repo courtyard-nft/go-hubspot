@@ -1,6 +1,10 @@
 package hubspot
 
-import "net/url"
+import (
+	"net/http"
+	"net/url"
+	"time"
+)
 
 // For test only
 
@@ -11,6 +15,14 @@ var (
 	ExportContactBasePath = contactBasePath
 	ExportDealBasePath    = dealBasePath
 )
+
+// ExportDefaultHTTPClient returns an HTTP client matching the default
+// configuration used by NewClient, for use in test expectations.
+func ExportDefaultHTTPClient() *http.Client {
+	return &http.Client{
+		Timeout: 30 * time.Second,
+	}
+}
 
 var (
 	ExportNewCRM       = newCRM

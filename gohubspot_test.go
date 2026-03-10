@@ -47,7 +47,7 @@ func TestNewClient(t *testing.T) {
 				setAuthMethod: hubspot.SetAPIKey("key"),
 			},
 			settings: settings{
-				client:     http.DefaultClient,
+				client:     hubspot.ExportDefaultHTTPClient(),
 				baseURL:    hubspot.ExportBaseURL,
 				apiVersion: hubspot.ExportAPIVersion,
 				authMethod: hubspot.SetAPIKey("key"),
@@ -65,7 +65,7 @@ func TestNewClient(t *testing.T) {
 				}),
 			},
 			settings: settings{
-				client:     http.DefaultClient,
+				client:     hubspot.ExportDefaultHTTPClient(),
 				baseURL:    hubspot.ExportBaseURL,
 				apiVersion: hubspot.ExportAPIVersion,
 				authMethod: hubspot.SetOAuth(&hubspot.OAuthConfig{
@@ -83,7 +83,7 @@ func TestNewClient(t *testing.T) {
 				setAuthMethod: hubspot.SetPrivateAppToken("token"),
 			},
 			settings: settings{
-				client:     http.DefaultClient,
+				client:     hubspot.ExportDefaultHTTPClient(),
 				baseURL:    hubspot.ExportBaseURL,
 				apiVersion: hubspot.ExportAPIVersion,
 				authMethod: hubspot.SetPrivateAppToken("token"),
@@ -111,7 +111,7 @@ func TestNewClient(t *testing.T) {
 				opts:          []hubspot.Option{hubspot.WithBaseURL(&url.URL{Scheme: "http", Host: "example.com"})},
 			},
 			settings: settings{
-				client:     http.DefaultClient,
+				client:     hubspot.ExportDefaultHTTPClient(),
 				baseURL:    &url.URL{Scheme: "http", Host: "example.com"},
 				apiVersion: hubspot.ExportAPIVersion,
 				authMethod: hubspot.SetPrivateAppToken("token"),
@@ -125,7 +125,7 @@ func TestNewClient(t *testing.T) {
 				opts:          []hubspot.Option{hubspot.WithAPIVersion("v0")},
 			},
 			settings: settings{
-				client:     http.DefaultClient,
+				client:     hubspot.ExportDefaultHTTPClient(),
 				baseURL:    hubspot.ExportBaseURL,
 				apiVersion: "v0",
 				authMethod: hubspot.SetPrivateAppToken("token"),
