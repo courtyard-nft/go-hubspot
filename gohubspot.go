@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/google/go-querystring/query"
 )
@@ -63,7 +64,9 @@ func NewClient(setAuthMethod AuthMethod, opts ...Option) (*Client, error) {
 	}
 
 	c := &Client{
-		HTTPClient: http.DefaultClient,
+		HTTPClient: &http.Client{
+			Timeout: 30 * time.Second,
+		},
 		baseURL:    defaultBaseURL,
 		apiVersion: defaultAPIVersion,
 	}
