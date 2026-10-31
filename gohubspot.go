@@ -68,13 +68,15 @@ func NewClient(setAuthMethod AuthMethod, opts ...Option) (*Client, error) {
 		apiVersion: defaultAPIVersion,
 	}
 
-	// Set the authentication method specified by the argument.
-	// Authentication method is either APIKey or OAuth.
-	setAuthMethod(c)
-
+	// Set options first so that the authentication method applied below can
+	// observe the final baseURL and HTTP client configuration.
 	for _, o := range opts {
 		o(c)
 	}
+
+	// Set the authentication method specified by the argument.
+	// Authentication method is either APIKey or OAuth.
+	setAuthMethod(c)
 
 	// Since the baseURL and apiVersion may change, initialize the service after applying the options.
 	c.CRM = newCRM(c)

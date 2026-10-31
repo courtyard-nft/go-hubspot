@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -27,11 +28,18 @@ type OAuthTokenManager struct {
 	HTTPClient *http.Client
 	Config     *OAuthConfig
 	Token      *OAuthToken
+
+	// mu serializes access to Token so that concurrent requests do not race on
+	// the cached token or trigger duplicate refresh calls.
+	mu sync.Mutex
 }
 
 var _ OAuthTokenRetriever = (*OAuthTokenManager)(nil)
 
 func (otm *OAuthTokenManager) RetrieveToken() (*OAuthToken, error) {
+	otm.mu.Lock()
+	defer otm.mu.Unlock()
+
 	if otm.Token.valid() {
 		return otm.Token, nil
 	}
